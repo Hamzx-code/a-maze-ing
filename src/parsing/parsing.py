@@ -18,8 +18,8 @@ class Parsed(BaseModel):
     """
         width: Number of columns (>= 1).
         height: Number of rows (>= 1).
-        entry: ``(x, y)`` coordinates of the maze entrance.
-        exit: ``(x, y)`` coordinates of the maze exit.
+        entry: (x, y) coordinates of the maze entrance.
+        exit: (x, y) coordinates of the maze exit.
         output_file: Path for the generated output.
         perfect: Whether the maze must be perfect (no loops).
         seed: RNG seed string.

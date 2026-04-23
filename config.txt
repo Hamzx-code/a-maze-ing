@@ -3,5 +3,5 @@ HEIGHT=25
 ENTRY=0,0
 EXIT=24,24
 PERFECT=True
-OUTPUT_FILE=output_maze.txt
+OUTPUT_FILE=maze.txt
 SEED=ft_ramaroud
