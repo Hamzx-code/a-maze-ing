@@ -1,21 +1,23 @@
 # ************************************************************************** #
 #                                                                            #
 #                                                        :::      ::::::::   #
-#   prim_algo.py                                       :+:      :+:    :+:   #
+#   prim.py                                            :+:      :+:    :+:   #
 #                                                    +:+ +:+         +:+     #
 #   By: hhamidi <hhamidi@student.42lyon.fr>        +#+  +:+       +#+        #
 #                                                +#+#+#+#+#+   +#+           #
-#   Created: 2026/04/26 23:01:06 by hhamidi           #+#    #+#             #
-#   Updated: 2026/04/26 23:01:06 by hhamidi          ###   ########.fr       #
+#   Created: 2026/04/29 17:08:28 by hhamidi           #+#    #+#             #
+#   Updated: 2026/04/29 17:08:28 by hhamidi          ###   ########.fr       #
 #                                                                            #
 # ************************************************************************** #
 
-from random import randint, choice, randrange
+from random import randint, choice, randrange, random
 from time import time
+from prim_utils import get_unvisited_neighbors, get_visited_neighbors
+from prim_utils import remove_wall, would_create_3x3
 
 
-width = 500
-height = 500
+width = 50
+height = 50
 
 NORTH = 0b0001
 EAST = 0b0010
@@ -25,69 +27,8 @@ WEST = 0b1000
 grid = [[0xf] * width for _ in range(height)]
 
 
-def get_unvisited_neighbors(frontiers: list[tuple[int, int]],
-                            visited_cells: set[tuple[int, int]],
-                            cell: tuple[int, int],
-                            width: int,
-                            height: int) -> None:
-
-    (x, y) = cell
-
-    if x > 0 and (x - 1, y) not in visited_cells:
-        frontiers.append((x - 1, y))
-
-    if x < width - 1 and (x + 1, y) not in visited_cells:
-        frontiers.append((x + 1, y))
-
-    if y > 0 and (x, y - 1) not in visited_cells:
-        frontiers.append((x, y - 1))
-
-    if y < height - 1 and (x, y + 1) not in visited_cells:
-        frontiers.append((x, y + 1))
-
-
-def get_visited_neighbors(visited_neighbors: list[tuple[int, int]],
-                          visited_cells: set[tuple[int, int]],
-                          cell: tuple[int, int],
-                          width: int, height: int) -> None:
-    (x, y) = cell
-    if x > 0 and (x - 1, y) in visited_cells:
-        visited_neighbors.append((x - 1, y))
-
-    if x < width - 1 and (x + 1, y) in visited_cells:
-        visited_neighbors.append((x + 1, y))
-
-    if y > 0 and (x, y - 1) in visited_cells:
-        visited_neighbors.append((x, y - 1))
-
-    if y < height - 1 and (x, y + 1) in visited_cells:
-        visited_neighbors.append((x, y + 1))
-
-
-def remove_wall(grid: list[list[int]], cell: tuple[int, int],
-                neighbor: tuple[int, int]):
-
-    cell_x, cell_y = cell
-    neighbor_x, neighbor_y = neighbor
-
-    if neighbor_y == cell_y + 1:
-        grid[cell_y][cell_x] &= ~SOUTH
-        grid[neighbor_y][neighbor_x] &= ~NORTH
-
-    elif neighbor_y == cell_y - 1:
-        grid[cell_y][cell_x] &= ~NORTH
-        grid[neighbor_y][neighbor_x] &= ~SOUTH
-
-    elif neighbor_x == cell_x + 1:
-        grid[cell_y][cell_x] &= ~EAST
-        grid[neighbor_y][neighbor_x] &= ~WEST
-
-    elif neighbor_x == cell_x - 1:
-        grid[cell_y][cell_x] &= ~WEST
-        grid[neighbor_y][neighbor_x] &= ~EAST
-
-
-def prim_algo(grid: list[list[int]], width: int, height: int):
+def prim(grid: list[list[int]], width: int, height: int,
+              perfect: bool = True, imperfection_rate: float = 0.1) -> None:
 
     frontiers: list[tuple[int, int]] = []
     visited_cells: set[tuple[int, int]] = set()
@@ -114,6 +55,17 @@ def prim_algo(grid: list[list[int]], width: int, height: int):
         visited_cells.add(random_cell)
         get_unvisited_neighbors(frontiers, visited_cells, random_cell, width,
                                 height)
+
+        if not perfect and random() < imperfection_rate:
+            extra_neighbors = [n for n in visited_neighbors
+                               if n != random_neighbor]
+            for neighbor in extra_neighbors:
+                if not would_create_3x3(grid, random_cell, neighbor, width,
+                                        height):
+                    remove_wall(grid, random_cell, neighbor)
+                    break
+
+
 
 
 def display_maze_matrix(grid: list[list[int]]):
@@ -160,9 +112,18 @@ def display_maze(grid, width, height):
 
 if __name__ == "__main__":
     start = time()
-    prim_algo(grid, width, height)
+    prim(grid, width, height)
     end = time()
-    # display_maze(grid, width, height)
+    display_maze(grid, width, height)
+    print("\n\n\n\n\n\n\n\n\n\n")
+    print("=================================================")
+    print(f"    Spell completed in {end - start:.8f} seconds")
+    print("=================================================")
+    print("\n\n\n\n\n\n\n\n\n\n")
+    start = time()
+    prim(grid, width, height, False, 0.1)
+    end = time()
+    display_maze(grid, width, height)
     print("\n\n\n\n\n\n\n\n\n\n")
     print("=================================================")
     print(f"    Spell completed in {end - start:.8f} seconds")

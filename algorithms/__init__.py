@@ -1,3 +1,3 @@
-from .prim_algo import prim_algo
+from .prim import prim
 
-__all__ = ["prim_algo"]
+__all__ = ["prim"]
