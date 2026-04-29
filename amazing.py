@@ -1,7 +1,9 @@
 #!/usr/bin/env python3
 
 from mazegen import Vec2
+from mazegen import GeneratorException
 from src.parsing import parse, Parsed, ParseError
+from src.visualizer import visualize
 from pydantic import ValidationError
 import sys
 
