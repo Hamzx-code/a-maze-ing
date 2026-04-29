@@ -24,6 +24,9 @@ build-mazegen: $(POETRY)
 install: $(POETRY)
 	$(POETRY) install
 
+run: install
+	$(POETRY) run python ./amazing.py $(CONFIG)
+
 clean:
 	find . -type d -name __pycache__ -exec rm -fr {} +
 	rm -fr .mypy_cache
