@@ -93,6 +93,8 @@ def would_create_3x3(grid: list[list[int]],cell: tuple[int, int],
         wall_a, wall_b = EAST, WEST
     elif nx == cx - 1:
         wall_a, wall_b = WEST, EAST
+    else:
+        return False
 
     for start_y in range(cy - 2, cy + 1):
         for start_x in range(cx - 2, cx + 1):

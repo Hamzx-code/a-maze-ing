@@ -16,8 +16,8 @@ from prim_utils import get_unvisited_neighbors, get_visited_neighbors
 from prim_utils import remove_wall, would_create_3x3
 
 
-width = 50
-height = 50
+width = 20
+height = 20
 
 NORTH = 0b0001
 EAST = 0b0010
@@ -121,9 +121,10 @@ if __name__ == "__main__":
     print("=================================================")
     print("\n\n\n\n\n\n\n\n\n\n")
     start = time()
-    prim(grid, width, height, False, 0.1)
+    grid2 = [[0xf] * width for _ in range(height)]
+    prim(grid2, width, height, False, 0.1)
     end = time()
-    display_maze(grid, width, height)
+    display_maze(grid2, width, height)
     print("\n\n\n\n\n\n\n\n\n\n")
     print("=================================================")
     print(f"    Spell completed in {end - start:.8f} seconds")
