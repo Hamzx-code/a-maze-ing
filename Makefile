@@ -29,7 +29,7 @@ run: install
 
 clean:
 	find . -type d -name __pycache__ -exec rm -fr {} +
-	rm -fr .mypy_cache
+	rm -rf .mypy_cache
 
 fclean: clean
-	rm -fr $(CLEAN)
+	rm -rf .venv

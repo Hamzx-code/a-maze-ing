@@ -14,9 +14,38 @@ class EWalls(Enum):
     VERTICAL = 1
 
 
+class EColorKeys(Enum):
+    """Keys used to look up colours"""
+
+    WALLS = "walls"
+    CELLS = "cells"
+    ENTRY = "entry"
+    EXIT = "exit"
+    EMPTY = "empty"
+
+
+class EEvents(Enum):
+    """Event flags"""
+
+    COLOR_CHANGE = "color_change"
+    REGEN = "regen"
+    PATH_TOGGLE = "path_toggle"
+    QUIT = "quit"
+
+
 WALL_WIDTH_RATIO: float = 0.25
 Color = Tuple[int, int, int, int]
 WallInfo = Tuple[Tuple[int, int], EWalls]
+
+
+colors: Dict[EColorKeys, Color] = {
+    EColorKeys.WALLS: (150, 150, 150, 255),
+    EColorKeys.CELLS: (255, 255, 255, 255),
+    EColorKeys.ENTRY: (255, 0, 150, 255),
+    EColorKeys.EXIT: (200, 200, 0, 255),
+    EColorKeys.EMPTY: (0, 0, 0, 255),
+}
+
 
 class Visualizer:
     """

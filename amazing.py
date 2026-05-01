@@ -1,6 +1,6 @@
 #!/usr/bin/env python3
 
-from mazegen import Vec2
+from mazegen import PrimGenerator, Vec2
 from mazegen import GeneratorException
 from src.parsing import parse, Parsed, ParseError
 from src.visualizer import visualize
@@ -22,7 +22,33 @@ def main(filename: str) -> None:
     except (ParseError, OSError) as e:
         print(e)
         sys.exit(1)
-    print(infos)
+
+    try:
+        generator = PrimGenerator(
+            infos.width,
+            infos.height,
+            Vec2(infos.entry[0], infos.entry[1]),
+            Vec2(infos.exit[0], infos.exit[1]),
+            seed=infos.seed,
+            output_file=infos.output_file,
+            is_perfect=infos.perfect,
+            locked_cells=[
+                [1, 0, 0, 0, 1, 1, 1],
+                [1, 0, 0, 0, 0, 0, 1],
+                [1, 1, 1, 0, 1, 1, 1],
+                [0, 0, 1, 0, 1, 0, 0],
+                [0, 0, 1, 0, 1, 1, 1],
+            ]
+        )
+    except GeneratorException as e:
+        print(f"An error occured during maze generation ({e})")
+        sys.exit(1)
+
+    try:
+        visualize(generator)
+    except GeneratorException as e:
+        print(f"An error occured during maze generation ({e})")
+
 
 
 
