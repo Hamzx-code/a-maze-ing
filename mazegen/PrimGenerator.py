@@ -3,12 +3,13 @@ from mazegen.Direction import EDirection
 from mazegen.MazeGenerator import MazeGenerator
 from mazegen.Cell import Cell
 from typing import List, Optional, Set, Tuple
+from sortedcontainers import SortedKeyList
 
 
 class PrimGenerator(MazeGenerator):
     """Maze generator using a randomised Prim's algorithm.
 
-    Extends :class:`MazeGenerator` by carving passages with Prim's
+    Extends :class:'MazeGenerator' by carving passages with Prim's
     algorithm: starting from a random cell, a frontier of unvisited
     neighbours is maintained.  At each step a random frontier cell is
     chosen and connected to a random already-visited neighbour.

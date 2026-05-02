@@ -43,7 +43,6 @@ class Maze:
         self.end_pos = Vec2(0, 0)
         self.locked_cells = []
         self.ft_pattern_end = Vec2(0, 0)
-        self.add_ft_pattern = False
         self.solution = []
 
     def reset_map(self) -> None:

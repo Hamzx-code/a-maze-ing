@@ -33,8 +33,8 @@ def main(filename: str) -> None:
             output_file=infos.output_file,
             is_perfect=infos.perfect,
             locked_cells=[
-                [1, 0, 1, 0, 1, 1, 1],
-                [1, 0, 1, 0, 0, 0, 1],
+                [1, 0, 0, 0, 1, 1, 1],
+                [1, 0, 0, 0, 0, 0, 1],
                 [1, 1, 1, 0, 1, 1, 1],
                 [0, 0, 1, 0, 1, 0, 0],
                 [0, 0, 1, 0, 1, 1, 1],
@@ -48,8 +48,6 @@ def main(filename: str) -> None:
         visualize(generator)
     except GeneratorException as e:
         print(f"An error occured during maze generation ({e})")
-
-
 
 
 if __name__ == "__main__":

@@ -33,7 +33,7 @@ class EEvents(Enum):
     QUIT = "quit"
 
 
-WALL_WIDTH_RATIO: float = 0.20
+WALL_WIDTH_RATIO: float = 0.25
 Color = Tuple[int, int, int, int]
 WallInfo = Tuple[Tuple[int, int], EWalls]
 
@@ -42,7 +42,7 @@ colors: Dict[EColorKeys, Color] = {
     EColorKeys.WALLS: (255, 255, 255, 255),
     EColorKeys.CELLS: (255, 160, 115, 255),
     EColorKeys.ENTRY: (60, 60, 250, 255),
-    EColorKeys.EXIT: (0, 0, 160, 255),
+    EColorKeys.EXIT: (0, 160, 0, 255),
     EColorKeys.EMPTY: (0, 0, 0, 255),
 }
 
@@ -69,8 +69,8 @@ class Visualizer:
             self.mlx_ptr
         )
 
-        screen_width = int(screen_width / 1.5)
-        screen_height = int(screen_height / 1.5)
+        screen_width = int(screen_width)
+        screen_height = int(screen_height / 1.1)
         screen_ratio: float = screen_width / screen_height
         maze_ratio: float = self.maze_width / self.maze_height
 

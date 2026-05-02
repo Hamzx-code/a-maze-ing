@@ -1,3 +1,4 @@
+from mazegen.GeneratorException import GeneratorException
 from mazegen.Direction import EDirection
 from mazegen.Vec2 import Vec2
 
@@ -42,6 +43,6 @@ class Cell:
             self.walls -= direction.value
 
     def reset_cell(self) -> None:
-        """Restore all walls and unlock the cell."""
+        """Restore all walls and unlock the cell"""
         self.walls = EDirection.ALL.value
         self.locked = False
