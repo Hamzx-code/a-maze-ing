@@ -38,37 +38,45 @@ class PrimGenerator(MazeGenerator):
         if (
             cell.position.y > 0
             and not maze.map[cell.position.y - 1][cell.position.x].locked
-            and maze.map[cell.position.y - 1][cell.position.x] not in visited_cells
+            and maze.map[cell.position.y - 1][cell.position.x]
+            not in visited_cells
         ):
             neighbors.append(
-                (maze.map[cell.position.y - 1][cell.position.x], EDirection.NORTH)
+                (maze.map[cell.position.y - 1][cell.position.x],
+                 EDirection.NORTH)
             )
 
         if (
             cell.position.x < maze.width - 1
             and not maze.map[cell.position.y][cell.position.x + 1].locked
-            and maze.map[cell.position.y][cell.position.x + 1] not in visited_cells
+            and maze.map[cell.position.y][cell.position.x + 1]
+            not in visited_cells
         ):
             neighbors.append(
-                (maze.map[cell.position.y][cell.position.x + 1], EDirection.EAST)
+                (maze.map[cell.position.y][cell.position.x + 1],
+                 EDirection.EAST)
             )
 
         if (
             cell.position.y < maze.height - 1
             and not maze.map[cell.position.y + 1][cell.position.x].locked
-            and maze.map[cell.position.y + 1][cell.position.x] not in visited_cells
+            and maze.map[cell.position.y + 1][cell.position.x]
+            not in visited_cells
         ):
             neighbors.append(
-                (maze.map[cell.position.y + 1][cell.position.x], EDirection.SOUTH)
+                (maze.map[cell.position.y + 1][cell.position.x],
+                 EDirection.SOUTH)
             )
 
         if (
             cell.position.x > 0
             and not maze.map[cell.position.y][cell.position.x - 1].locked
-            and maze.map[cell.position.y][cell.position.x - 1] not in visited_cells
+            and maze.map[cell.position.y][cell.position.x - 1]
+            not in visited_cells
         ):
             neighbors.append(
-                (maze.map[cell.position.y][cell.position.x - 1], EDirection.WEST)
+                (maze.map[cell.position.y][cell.position.x - 1],
+                 EDirection.WEST)
             )
 
         return neighbors
@@ -98,7 +106,8 @@ class PrimGenerator(MazeGenerator):
             and maze.map[cell.position.y - 1][cell.position.x] in visited_cells
         ):
             neighbors.append(
-                (maze.map[cell.position.y - 1][cell.position.x], EDirection.NORTH)
+                (maze.map[cell.position.y - 1][cell.position.x],
+                 EDirection.NORTH)
             )
 
         if (
@@ -107,7 +116,8 @@ class PrimGenerator(MazeGenerator):
             and maze.map[cell.position.y][cell.position.x + 1] in visited_cells
         ):
             neighbors.append(
-                (maze.map[cell.position.y][cell.position.x + 1], EDirection.EAST)
+                (maze.map[cell.position.y][cell.position.x + 1],
+                 EDirection.EAST)
             )
 
         if (
@@ -116,7 +126,8 @@ class PrimGenerator(MazeGenerator):
             and maze.map[cell.position.y + 1][cell.position.x] in visited_cells
         ):
             neighbors.append(
-                (maze.map[cell.position.y + 1][cell.position.x], EDirection.SOUTH)
+                (maze.map[cell.position.y + 1][cell.position.x],
+                 EDirection.SOUTH)
             )
 
         if (
@@ -125,12 +136,14 @@ class PrimGenerator(MazeGenerator):
             and maze.map[cell.position.y][cell.position.x - 1] in visited_cells
         ):
             neighbors.append(
-                (maze.map[cell.position.y][cell.position.x - 1], EDirection.WEST)
+                (maze.map[cell.position.y][cell.position.x - 1],
+                 EDirection.WEST)
             )
 
         return neighbors
 
-    def _carve_between(self, cell: Cell, neighbor: Cell, direction: EDirection) -> None:
+    def _carve_between(self, cell: Cell, neighbor: Cell,
+                       direction: EDirection) -> None:
         """Carve a passage from *cell* toward *neighbor* in *direction*.
 
         Opens the wall on *cell* in *direction* and the matching
@@ -445,7 +458,8 @@ class PrimGenerator(MazeGenerator):
         # Duplicates are allowed and skipped when popped if already visited.
         frontiers: List[Cell] = []
 
-        for neighbor, _ in self._get_unvisited_neighbors(start_cell, visited_cells):
+        for neighbor, _ in self._get_unvisited_neighbors(start_cell,
+                                                         visited_cells):
             frontiers.append(neighbor)
 
         rng = self._get_rng()
@@ -457,12 +471,14 @@ class PrimGenerator(MazeGenerator):
             frontiers[idx] = frontiers[-1]
             frontiers.pop()
 
-            # Skip if already visited (can happen due to duplicates in the list)
+            # Skip if already visited
+            # (can happen due to duplicates in the list)
             if frontier_cell in visited_cells:
                 continue
 
             # Connect frontier_cell to a random visited neighbour
-            visited_neighbors = self._get_visited_neighbors(frontier_cell, visited_cells)
+            visited_neighbors = self._get_visited_neighbors(frontier_cell,
+                                                            visited_cells)
             if not visited_neighbors:
                 continue
 
@@ -473,8 +489,9 @@ class PrimGenerator(MazeGenerator):
             updated_cells.append(frontier_cell)
 
             # Extend the frontier with new unvisited neighbours
-            for new_frontier, _ in self._get_unvisited_neighbors(frontier_cell, visited_cells):
-                frontiers.append(new_frontier)
+            for frontier, _ in self._get_unvisited_neighbors(frontier_cell,
+                                                             visited_cells):
+                frontiers.append(frontier)
 
         self.get_maze().status = Maze.Status.GENERATED
 
