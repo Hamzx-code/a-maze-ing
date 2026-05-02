@@ -33,16 +33,16 @@ class EEvents(Enum):
     QUIT = "quit"
 
 
-WALL_WIDTH_RATIO: float = 0.25
+WALL_WIDTH_RATIO: float = 0.20
 Color = Tuple[int, int, int, int]
 WallInfo = Tuple[Tuple[int, int], EWalls]
 
 
 colors: Dict[EColorKeys, Color] = {
-    EColorKeys.WALLS: (150, 150, 150, 255),
-    EColorKeys.CELLS: (255, 255, 255, 255),
-    EColorKeys.ENTRY: (255, 0, 150, 255),
-    EColorKeys.EXIT: (200, 200, 0, 255),
+    EColorKeys.WALLS: (255, 255, 255, 255),
+    EColorKeys.CELLS: (255, 160, 115, 255),
+    EColorKeys.ENTRY: (60, 60, 250, 255),
+    EColorKeys.EXIT: (0, 0, 160, 255),
     EColorKeys.EMPTY: (0, 0, 0, 255),
 }
 
@@ -340,7 +340,7 @@ class Visualizer:
         self.m.mlx_sync(self.mlx_ptr, self.m.SYNC_WIN_FLUSH, self.win_ptr)
 
     def run_visualizer(self, state: Dict[EEvents, bool]) -> None:
-        """Enter the MLX loop, reacting to state flags.
+        """Enter the MLX loop, reacting to state flags
 
         Args:
             state: Mutable dictionary,
@@ -348,12 +348,13 @@ class Visualizer:
         """
 
         def on_loop(_: Any) -> None:
-            """Handle one iteration of the MLX event loop.
+            """Handle one iteration of the MLX event loop
 
             Checks state flags and performs the corresponding action
             """
             if state[EEvents.REGEN]:
                 self.draw_empty()
+                self.generator.reset_maze()
                 self.generator.generate()
                 self.maze = self.generator.get_maze().map
                 self.generator.get_maze().solve()
@@ -406,10 +407,10 @@ def visualize(generator: MazeGenerator) -> None:
     """Create a visualiser window and run until closed.
 
     Keyboard controls:
-        * **c** - randomise wall colour
-        * **p** - toggle solution path
-        * **r** - regenerate maze
-        * **q** - quit
+        * c - randomise wall colour
+        * p - toggle solution path
+        * r - regenerate maze
+        * q - quit
 
     Args:
         generator: The maze generator to visualise.
@@ -426,8 +427,8 @@ def visualize(generator: MazeGenerator) -> None:
     ) -> None:
         """Map key presses to event-state flags.
 
-        Recognised keys: ``c`` (colour change), ``p`` (path toggle),
-        ``r`` (regenerate), ``q`` (quit).
+        Recognised keys: 'c' (colour change), 'p' (path toggle),
+        'r' (regenerate), 'q' (quit).
 
         Args:
             key: The key event received from the listener.

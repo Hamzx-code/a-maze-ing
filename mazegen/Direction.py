@@ -7,16 +7,6 @@ class EDirection(IntFlag):
         EAST = 2    or 0010
         SOUTH = 4   or 0100
         WEST = 8    or 1000
-        
-        Examples
-         1       -
-        1 1     | |
-         1       -
-        This cell equal 15 
-         0       
-        1 0     |
-         1       -
-        This cell equal 12
     """
 
     NORTH = 1 << 0

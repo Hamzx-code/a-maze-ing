@@ -9,7 +9,6 @@ from config_validator import ConfigValidator, InvalidConfigException
 
 class ParseError(Exception):
 
-
     def __init__(self, msg: str = "Not specified") -> None:
         super().__init__(f"ParseError: {msg}")
 
@@ -129,7 +128,6 @@ def parse(filename: str) -> Parsed:
         FileNotFoundError: If *filename* does not exist
         pydantic.ValidationError: If the parsed values fail model validation
     """
- 
     values: Dict[str, object] = {}
     with open(filename) as f:
         try:

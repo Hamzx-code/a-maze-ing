@@ -4,9 +4,9 @@ from mazegen.Vec2 import Vec2
 from mazegen.Direction import EDirection
 from enum import IntEnum, auto
 from typing import Dict, List, Literal, Optional, Tuple
-from sortedcontainers import SortedKeyList
 
 Coord = Tuple[int, int]
+
 
 class Maze:
     """
@@ -32,8 +32,6 @@ class Maze:
     add_ft_pattern: bool
     solution: List[Coord]
 
-
-
     def __init__(self) -> None:
         """Initialize an empty maze
         with status 'BLANK'"""
@@ -48,14 +46,12 @@ class Maze:
         self.add_ft_pattern = False
         self.solution = []
 
-
     def reset_map(self) -> None:
         """Reset every cell and set status to 'BLANK'"""
         self.status = Maze.Status.BLANK
         for line in self.map:
             for cell in line:
                 cell.reset_cell()
-
 
     def init_map(
         self,
@@ -112,7 +108,6 @@ class Maze:
                 "Cannot place the 42 pattern,",
                 "will generate the maze without it."
             )
-
 
     def carve_cell(self, cell: Cell, directions: int) -> None:
         if cell.locked:

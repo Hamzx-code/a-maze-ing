@@ -7,6 +7,7 @@ from abc import ABC, abstractmethod
 from random import Random
 from config_validator import ConfigValidator
 
+
 class MazeGenerator(ABC):
     __maze: Maze
     __seed: Union[str, None]
@@ -39,7 +40,7 @@ class MazeGenerator(ABC):
         is_perfect: bool = True,
         output_file: str = "output_maze.txt",
     ) -> None:
- 
+
         ConfigValidator.validate(
             height=height,
             width=width,
@@ -82,7 +83,6 @@ class MazeGenerator(ABC):
             self.__locked_cells,
         )
 
-
     def __format_output(self) -> str:
         """
         Print the maze into the expected output format
@@ -122,8 +122,6 @@ class MazeGenerator(ABC):
         output += solutions_moves
         output += "\n"
         return output
-
-
 
     def write_output_file(self) -> None:
         """Format and write the maze to the configured output file"""

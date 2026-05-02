@@ -33,8 +33,8 @@ def main(filename: str) -> None:
             output_file=infos.output_file,
             is_perfect=infos.perfect,
             locked_cells=[
-                [1, 0, 0, 0, 1, 1, 1],
-                [1, 0, 0, 0, 0, 0, 1],
+                [1, 0, 1, 0, 1, 1, 1],
+                [1, 0, 1, 0, 0, 0, 1],
                 [1, 1, 1, 0, 1, 1, 1],
                 [0, 0, 1, 0, 1, 0, 0],
                 [0, 0, 1, 0, 1, 1, 1],
