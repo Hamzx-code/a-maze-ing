@@ -167,7 +167,6 @@ def parse(filename: str) -> Parsed:
     if values.get("perfect") is None:
         raise ParseError(f"Missing key perfect in {filename}")
     if values.get("seed") == "" or values.get("seed") is None:
-        print("WARNING: You forgot to set the seed, generating one for you...")
         curr_time = int(time())
         random_seed = f"{curr_time}"
         print(f"Using {random_seed} as a seed")
