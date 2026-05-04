@@ -1,3 +1,3 @@
-__all__ = ["visualize"]
-
 from .Visualizer import visualize
+
+__all__ = ["visualize"]
