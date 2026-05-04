@@ -5,6 +5,7 @@ from mazegen import GeneratorException
 from src.parsing import parse, Parsed, ParseError
 from src.visualizer import visualize
 from pydantic import ValidationError
+from pathlib import Path
 import sys
 
 
@@ -58,6 +59,10 @@ if __name__ == "__main__":
                 "make run /",
                 "make run CONFIG=[config_file]"
             )
+            sys.exit(1)
+        path = Path(sys.argv[1])
+        if path.suffix.lower() != ".txt":
+            print("Error: configuration file must have a .txt extension")
             sys.exit(1)
 
         main(sys.argv[1])
