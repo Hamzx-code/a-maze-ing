@@ -284,4 +284,3 @@ During development, some parts took longer than expected:
 Claude was used for:
 - Explaining algorithmic concepts (Prim, A*).
 - Drafting this README structure.
-
