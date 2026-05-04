@@ -78,13 +78,13 @@ SEED=42
 
 | Key | Type | Required | Description |
 |---|---|---|---|
-| `WIDTH` | int (3–1000) | ✅ | Number of columns |
-| `HEIGHT` | int (3–1000) | ✅ | Number of rows |
+| `WIDTH` | int (3–250) | ✅ | Number of columns |
+| `HEIGHT` | int (3–250) | ✅ | Number of rows |
 | `ENTRY` | x,y | ✅ | Entry coordinates |
 | `EXIT` | x,y | ✅ | Exit coordinates |
 | `OUTPUT_FILE` | .txt filename | ✅ | Output file name |
 | `PERFECT` | True/False | ✅ | Perfect maze (single path) |
-| `SEED` | int | ✅ | Random seed for reproducibility |
+| `SEED` | string | ✅ | Random seed for reproducibility |
 
 ---
 
@@ -164,30 +164,36 @@ pip install mazegen-1.0.0-py3-none-any.whl
 ### Basic usage
 
 ```python
-from mazegen import MazeGenerator
+from mazegen.PrimGenerator import PrimGenerator
+from mazegen.Vec2 import Vec2
 
 # Create a 20x15 perfect maze with a fixed seed
-maze = MazeGenerator(width=20, height=15, seed=42, perfect=True)
+maze = PrimGenerator(
+    width=20,
+    height=15,
+    start_pos=Vec2(0, 0),
+    end_pos=Vec2(19, 14),
+    seed="42",
+    is_perfect=True
+)
+
 maze.generate()
-
-# Access the grid (list of lists of int, hex-encoded walls)
-grid = maze.grid
-
-# Access the solution path
-path = maze.solve(entry=(0, 0), exit=(19, 14))
-print(path)  # e.g. "NNEESSWW"
 ```
 
 ### Custom parameters
 
 ```python
-# Imperfect maze with 20% imperfection rate
-maze = MazeGenerator(
+from mazegen.PrimGenerator import PrimGenerator
+from mazegen.Vec2 import Vec2
+
+# Imperfect maze
+maze = PrimGenerator(
     width=30,
     height=30,
-    seed=123,
-    perfect=False,
-    imperfection_rate=0.2
+    start_pos=Vec2(0, 0),
+    end_pos=Vec2(19, 14),
+    seed="42",
+    is_perfect=False,
 )
 maze.generate()
 ```
