@@ -4,7 +4,7 @@ from typing import Any, Dict, List, Tuple, Union
 from mlx import Mlx
 from pynput import keyboard
 from pynput.keyboard import Key, KeyCode
-from mazegen import MazeGenerator
+from mazegen.MazeGenerator import MazeGenerator
 from mazegen.Cell import Cell
 from mazegen.Direction import EDirection
 
