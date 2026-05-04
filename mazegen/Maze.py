@@ -148,7 +148,7 @@ class Maze:
             GeneratorException: If 'cell' is locked, or if carving in a
                 direction would go out of bounds.
         """
- 
+
         if cell.locked:
             raise GeneratorException("Cannot carve a locked cell")
 

@@ -394,6 +394,12 @@ class Visualizer:
                     random.randint(75, 200),
                     255,
                 )
+                colors[EColorKeys.CELLS] = (
+                    random.randint(75, 200),
+                    random.randint(75, 200),
+                    random.randint(75, 200),
+                    255,
+                )
                 self.draw_maze()
                 state[EEvents.COLOR_CHANGE] = False
 
