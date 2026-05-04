@@ -2,11 +2,10 @@ from enum import IntFlag
 
 
 class EDirection(IntFlag):
-    """
-        NORTH = 1   or 0001
-        EAST = 2    or 0010
-        SOUTH = 4   or 0100
-        WEST = 8    or 1000
+    """Bitmask flags representing the four cardinal directions.
+
+    Built on 'IntFlag', values can be combined with bitwise operators
+    to express multiple directions at once (e.g. 'NORTH | EAST').
     """
 
     NORTH = 1 << 0

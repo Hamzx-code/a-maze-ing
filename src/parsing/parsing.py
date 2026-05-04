@@ -8,24 +8,32 @@ from config_validator import ConfigValidator, InvalidConfigException
 
 
 class ParseError(Exception):
+    """Exception raised when the configuration file cannot be parsed."""
 
     def __init__(self, msg: str = "Not specified") -> None:
+        """Initialize ParseError with an optional message.
+
+        Args:
+            msg: Human-readable description of the error. Defaults to
+                "Not specified".
+        """
         super().__init__(f"ParseError: {msg}")
 
 
 class Parsed(BaseModel):
-    """
-        width: Number of columns (>= 1).
-        height: Number of rows (>= 1).
+    """Validated configuration parsed from a maze config file.
+
+    Attributes:
+        width: Number of columns in the maze (4–250).
+        height: Number of rows in the maze (4–250).
         entry: (x, y) coordinates of the maze entrance.
         exit: (x, y) coordinates of the maze exit.
-        output_file: Path for the generated output.
+        output_file: Path for the generated output file.
         perfect: Whether the maze must be perfect (no loops).
-        seed: RNG seed string.
+        seed: Optional RNG seed string.
     """
-
-    width: int = Field(ge=4, le=500)
-    height: int = Field(ge=4, le=500)
+    width: int = Field(ge=4, le=250)
+    height: int = Field(ge=4, le=250)
     entry: Tuple[int, int]
     exit: Tuple[int, int]
     output_file: str = Field(min_length=1)
@@ -34,9 +42,14 @@ class Parsed(BaseModel):
 
     @model_validator(mode="after")
     def validate_coords(self) -> "Parsed":
-        """
+        """Validate entry and exit coordinates against maze dimensions.
+
+        Returns:
+            The validated instance.
+
         Raises:
-            ValueError: If the coordinates are invalid.
+            ValueError: If entry or exit coordinates are out of bounds
+                or overlap with a locked cell.
         """
         try:
             ConfigValidator.validate(
@@ -64,11 +77,16 @@ class ParsedDict(TypedDict):
 
 
 def parse_tuple(arg: str) -> Tuple[int, int]:
-    """Parse a 'x,y' string into an integer 2-tuple
+    """Parse a 'x,y' string into an integer 2-tuple.
 
-    Args: Comma-separated pair of integers
-    Returns: The parsed (x, y) tuple
-    Raises: ValueError: If *arg* does not contain exactly two ints.
+    Args:
+        arg: Comma-separated pair of integers, e.g. '3,7'.
+
+    Returns:
+        The parsed (x, y) tuple.
+
+    Raises:
+        ParseError: If *arg* does not contain exactly two integers.
     """
     parts = arg.split(",")
     if len(parts) != 2:
@@ -77,11 +95,16 @@ def parse_tuple(arg: str) -> Tuple[int, int]:
 
 
 def parse_bool(arg: str) -> bool:
-    """Parse 'True' / 'False' into a boolean.
+    """Parse 'True' or 'False' into a boolean.
 
-    Args: Literal "True" or "False"
-    Returns: The corresponding boolean value
-    Raises: ParseError: If arg is neither "True" or "False"
+    Args:
+        arg: Literal string "True" or "False".
+
+    Returns:
+        The corresponding boolean value.
+
+    Raises:
+        ParseError: If *arg* is neither "True" nor "False".
     """
     match arg:
         case "True":
@@ -118,15 +141,24 @@ FUNCTION_FOR_KEY: Dict[str, Callable[..., object]] = {
 
 
 def parse(filename: str) -> Parsed:
-    """Read the config file and parse it
-    Lines starting with '#' and blank lines are ignored.
+    """Read and parse a maze configuration file.
 
-    Args: filename: Path to the configuration file.
-    Returns: A validated :class:`Parsed` instance.
+    Lines starting with '#' and blank lines are ignored.
+    Keys are case-insensitive. Each key must appear at most once.
+
+    Args:
+        filename: Path to the configuration file.
+
+    Returns:
+        A validated :class:`Parsed` instance containing all
+        configuration values.
+
     Raises:
-        ParseError: If the file contains an invalid key or a malformed line
-        FileNotFoundError: If *filename* does not exist
-        pydantic.ValidationError: If the parsed values fail model validation
+        ParseError: If the file contains an unknown key, a malformed
+            line, a duplicate key, or a missing required key.
+        FileNotFoundError: If *filename* does not exist.
+        pydantic.ValidationError: If the parsed values fail model
+            validation.
     """
     values: Dict[str, object] = {}
     with open(filename) as f:

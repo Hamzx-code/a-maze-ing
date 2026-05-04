@@ -4,14 +4,17 @@ from mazegen.Vec2 import Vec2
 
 
 class Cell:
-    """
-    A single cell in the maze grid.
-    Walls are stored as a 'Direction' bitmask,
-    each bits represent a wall of the cell.
+    """A single cell in the maze grid.
+
+    Walls are stored as an 'EDirection' bitmask: a set bit means the wall
+    is present, a cleared bit means it has been carved open.
+
+    Attributes:
         position: Grid coordinates of this cell.
-        walls: Bitmask of current walls. Defaults to 'EDirection.ALL'
-        (every wall are present).
-        locked: If 'True', the cell cannot be carved or modified.
+        walls: Bitmask of current walls. Defaults to ``EDirection.ALL``
+        (fully enclosed).
+        locked: If ``True``, the cell cannot be carved or modified
+        by the generator.
     """
 
     position: Vec2
@@ -25,17 +28,25 @@ class Cell:
         locked: bool = False,
     ):
         """
-        Position in the maze
-        The bits that represents the differents walls of the cells
-        True or False depends on the state of the Cell
+        Args:
+            position: Grid coordinates of this cell.
+            walls: Initial wall bitmask. Defaults to all walls present.
+            locked: Whether the cell is locked against modification.
         """
         self.position = position
         self.walls = walls
         self.locked = locked
 
     def carve(self, direction: EDirection) -> None:
-        """
-        Carve the wall of a cell in a given direction
+        """Remove a wall in the given direction (clear its bit).
+
+        No-op if the wall is already absent.
+
+        Args:
+            direction: The wall to remove.
+
+        Raises:
+            GeneratorException: If the cell is locked.
         """
         if self.locked:
             raise GeneratorException("Cannot edit a locked cell")

@@ -9,8 +9,17 @@ Coord = Tuple[int, int]
 
 
 class Maze:
-    """
-    The maze
+    """Two-dimensional grid maze with generation and solving support.
+
+    Attributes:
+        map: 2-D grid of 'Cell' objects (row-major).
+        width: Number of columns.
+        height: Number of rows.
+        status: Current lifecycle stage of the maze.
+        start_pos: Entry cell coordinates.
+        end_pos: Exit cell coordinates.
+        solution: Ordered list of '(x, y)' pairs from entry
+            to exit, populated after :meth:'solve' is called.
     """
 
     class Status(IntEnum):
@@ -60,8 +69,22 @@ class Maze:
         end_pos: Vec2,
         locked_cells: Optional[List[List[Literal[0, 1]]]] = None
     ) -> None:
-        """
-        Locked cells can't be carved
+        """Allocate the grid and optionally overlay the 42 pattern.
+
+        Cells that are part of the 42 pattern are marked as locked,
+        preventing the generator from carving through them.
+
+        Args:
+            width: Number of columns.
+            height: Number of rows.
+            start_pos: Maze entry coordinates.
+            end_pos: Maze exit coordinates.
+            add_ft_pattern: Whether to lock cells forming the 42 logo
+                at the center of the grid.
+
+        Raises:
+            GeneratorException: If 'start_pos' or 'end_pos' falls
+                inside the 42 pattern.
         """
         self.status = Maze.Status.INITIALIZED
         self.width = width
@@ -109,6 +132,23 @@ class Maze:
             )
 
     def carve_cell(self, cell: Cell, directions: int) -> None:
+        """Remove walls between a cell and its neighbours
+        in the given directions.
+
+        Each direction in the bitmask opens the corresponding wall on 'cell'
+        and the matching wall on the adjacent cell (e.g. carving NORTH also
+        opens SOUTH on the cell above).
+
+        Args:
+            cell: The cell to carve from.
+            directions: Bitmask of ``EDirection`` values indicating which
+                walls to remove.
+
+        Raises:
+            GeneratorException: If 'cell' is locked, or if carving in a
+                direction would go out of bounds.
+        """
+ 
         if cell.locked:
             raise GeneratorException("Cannot carve a locked cell")
 
@@ -153,11 +193,10 @@ class Maze:
             cell.carve(EDirection.WEST)
 
     def solve(self) -> None:
-        """Find the shortest path from start to end using A*.
+        """Find the shortest path from entry to exit using A*.
 
         Results are stored in :attr:`solution` as a list of
-        ``(x, y)`` coordinate tuples ordered from start to end.
-        Sets :attr:`status` to ``SOLVED`` if a path is found.
+        '(x, y)' coordinate tuples ordered from start to end.
         """
         from heapq import heappush, heappop
 

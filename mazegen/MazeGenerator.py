@@ -9,6 +9,13 @@ from config_validator import ConfigValidator
 
 
 class MazeGenerator(ABC):
+    """
+    Abstract base class for maze generators.
+
+    Handles maze initialization, output formatting, and file writing.
+    Subclasses must implement the `generate` method with their own algorithm.
+    """
+
     __maze: Maze
     __seed: Union[str, None]
     __rng: Random
@@ -19,16 +26,6 @@ class MazeGenerator(ABC):
     __output_file: str
     __locked_cells: Optional[List[List[Literal[0, 1]]]]
 
-    """
-        width: Number of columns in the maze
-        height: Number of rows in the maze
-        start_pos: Entry point of the maze
-        end_pos: Exit point of the maze
-        seed: Optional RNG seed for reproducible generation
-        add_ft_pattern: Whether to overlay the 42 pattern onto the maze
-        is_perfect: Whether the maze should be perfect
-        output_file: Path to the file where the maze will be written
-    """
     def __init__(
         self,
         width: int,
@@ -40,7 +37,19 @@ class MazeGenerator(ABC):
         is_perfect: bool = True,
         output_file: str = "output_maze.txt",
     ) -> None:
+        """
+        Initialize the maze generator and its underlying maze structure.
 
+        Args:
+            width: Number of columns in the maze.
+            height: Number of rows in the maze.
+            start_pos: Entry point of the maze.
+            end_pos: Exit point of the maze.
+            seed: Optional RNG seed for reproducible generation.
+            add_ft_pattern: Whether to overlay the 42 pattern onto the maze.
+            is_perfect: Whether the maze should be perfect.
+            output_file: Path to the file where the maze will be written.
+        """
         ConfigValidator.validate(
             height=height,
             width=width,
@@ -65,15 +74,19 @@ class MazeGenerator(ABC):
     @abstractmethod
     def generate(self, seed: Optional[str] = None) -> List[Cell]:
         """
-        Run the maze generation algorithm
+        Run the maze generation algorithm.
 
-        Args: seed
-        Returns: The list of cells (Chronological Order)
+        Args:
+            seed: Optional seed to override the one set at construction.
+
+        Returns:
+            The list of cells in the order they were visited during generation.
         """
         pass
 
     def reset_maze(self) -> None:
-        """Reset the maze, clearing all walls and paths"""
+        """Reset the maze to its initial state, clearing all generated walls
+        and paths."""
         self.__maze.reset_map()
         self.__maze.init_map(
             self.__width,
@@ -85,11 +98,19 @@ class MazeGenerator(ABC):
 
     def __format_output(self) -> str:
         """
-        Print the maze into the expected output format
+        Print the maze into the expected output format.
 
-        Returns: The string ready to be written to a file
+        Each cell's wall bitmask is encoded as a single hex digit (0-F).
+        The output contains the maze grid, start/end coordinates,
+        and the solution as a sequence of cardinal direction characters
+        (N/S/E/W).
+
+        Returns:
+            The formatted maze string ready to be written to a file.
+
         Raises:
-            GeneratorException: If a cell's wall value is greater than 15
+            GeneratorException: If a cell's wall value exceeds the encodable
+            range (> 15).
         """
         digits = "0123456789ABCDEF"
         output = ""

@@ -10,12 +10,13 @@ from mazegen.Direction import EDirection
 
 
 class EWalls(Enum):
+    """Wall orientation variants."""
     HORIZONTAL = 0
     VERTICAL = 1
 
 
 class EColorKeys(Enum):
-    """Keys used to look up colours"""
+    """Keys used to look up colours in the global palette."""
 
     WALLS = "walls"
     CELLS = "cells"
@@ -25,7 +26,7 @@ class EColorKeys(Enum):
 
 
 class EEvents(Enum):
-    """Event flags"""
+    """Event flags consumed by the main loop."""
 
     COLOR_CHANGE = "color_change"
     REGEN = "regen"
@@ -48,14 +49,19 @@ colors: Dict[EColorKeys, Color] = {
 
 
 class Visualizer:
-    """
+    """Render a maze into an MLX window.
+
     Args:
-        generator: A 'MazeGenerator' instance
+        generator: A ``MazeGenerator`` instance whose maze has
+            already been initialised.
     """
 
     def __init__(self, generator: MazeGenerator) -> None:
-        """
-        Initialize the visualizer and create the MLX window.
+        """Initialize the visualizer, compute layout and create the MLX window.
+
+        Args:
+            generator: A ``MazeGenerator`` instance whose maze has
+                already been initialised.
         """
         self.generator = generator
         self.maze: List[List[Cell]] = generator.get_maze().map
@@ -169,8 +175,10 @@ class Visualizer:
             ]
 
     def draw_isolated(self, color: Color) -> None:
-        """
-        Draw all locked cells with the given colour.
+        """Draw all locked (isolated) cells with the given colour.
+
+        Args:
+            color: RGBA colour tuple applied to every isolated cell.
         """
         for cell in self.isolated_cells:
             x: int = cell.position.x * self.cell_size
@@ -185,11 +193,14 @@ class Visualizer:
             )
 
     def draw_path(self, draw_black: bool = False) -> None:
-        """Draw the solution path or erase it.
+        """Draw the solution path with a gradient or erase it.
 
-        When draw_black is False the path fades from the
-        entry colour to the exit colour.  When True the path
+        When *draw_black* is ``False`` the path fades from the
+        entry colour to the exit colour.  When ``True`` the path
         is overwritten with the empty colour.
+
+        Args:
+            draw_black: If ``True``, paint path cells black.
         """
         path_length: int = len(self.path)
         if path_length == 0:
@@ -348,9 +359,10 @@ class Visualizer:
         """
 
         def on_loop(_: Any) -> None:
-            """Handle one iteration of the MLX event loop
+            """Handle one iteration of the MLX event loop.
 
             Checks state flags and performs the corresponding action
+            (regenerate, toggle path, change colour, or quit).
             """
             if state[EEvents.REGEN]:
                 self.draw_empty()
@@ -407,10 +419,10 @@ def visualize(generator: MazeGenerator) -> None:
     """Create a visualiser window and run until closed.
 
     Keyboard controls:
-        * c - randomise wall colour
-        * p - toggle solution path
-        * r - regenerate maze
-        * q - quit
+        * **c** - randomise wall colour
+        * **p** - toggle solution path
+        * **r** - regenerate maze
+        * **q** - quit
 
     Args:
         generator: The maze generator to visualise.
