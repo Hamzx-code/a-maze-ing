@@ -32,8 +32,8 @@ class Parsed(BaseModel):
         perfect: Whether the maze must be perfect (no loops).
         seed: Optional RNG seed string.
     """
-    width: int = Field(ge=4, le=250)
-    height: int = Field(ge=4, le=250)
+    width: int = Field(ge=3, le=250)
+    height: int = Field(ge=3, le=250)
     entry: Tuple[int, int]
     exit: Tuple[int, int]
     output_file: str = Field(min_length=1)

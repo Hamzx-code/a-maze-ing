@@ -6,6 +6,6 @@ class InvalidConfigException(ValueError):
 
         Args:
             message: Description of the invalid configuration.
-                Defaults to ``"Unspecified"``.
+                Defaults to "Unspecified".
         """
         super().__init__(f"Invalid Config: {message}")

@@ -25,7 +25,7 @@ install: $(POETRY)
 	$(POETRY) install
 
 run: install
-	$(POETRY) run python ./amazing.py $(CONFIG)
+	$(POETRY) run python ./a_maze_ing.py $(CONFIG)
 
 debug: install
 	$(POETRY) run python -m pdb ./a_maze_ing.py $(CONFIG)

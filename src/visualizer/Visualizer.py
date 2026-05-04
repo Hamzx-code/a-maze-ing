@@ -75,8 +75,8 @@ class Visualizer:
             self.mlx_ptr
         )
 
-        screen_width = int(screen_width)
-        screen_height = int(screen_height / 1.1)
+        screen_width = int(screen_width / 1.25)
+        screen_height = int(screen_height / 1.25)
         screen_ratio: float = screen_width / screen_height
         maze_ratio: float = self.maze_width / self.maze_height
 
